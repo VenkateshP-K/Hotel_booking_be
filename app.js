@@ -35,6 +35,11 @@ app.use(morgan('dev'));
 //use express middleware
 app.use(express.json());
 
+//render views
+app.get('/', (req, res) => {
+    res.send('Hello!');
+})
+
 //define endpoints
 app.use('/api/users', userRouter);
 app.use('/api/hotels',hotelRouter);
