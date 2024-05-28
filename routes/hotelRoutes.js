@@ -11,7 +11,7 @@ const hotelRouter = express.Router();
 
 //define routes
 hotelRouter.post('/',auth.isAuth,auth.isAdmin,hotelController.createHotel);
-hotelRouter.get('/', auth.isAuth,auth.isAdmin,hotelController.getAllHotels);
+hotelRouter.get('/', auth.isAuth,hotelController.getAllHotels);
 hotelRouter.get('/:id', auth.isAuth,auth.isAdmin,hotelController.getHotel);
 hotelRouter.put('/:id', auth.isAuth,auth.isAdmin,hotelController.updateHotel);
 hotelRouter.delete('/:id', auth.isAuth,auth.isAdmin,hotelController.deleteHotel);

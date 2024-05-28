@@ -38,7 +38,7 @@ const hotelController = {
         const hotels = await Hotel.find();
 
         //return the response
-        res.status(200).json({hotels})
+        res.status(200).json(hotels)
     } catch (error) {
         res.status(500).json({message : error.message})
     }

@@ -15,9 +15,9 @@ userRouter.post('/', userController.register);
 userRouter.post('/login', userController.login);
 
 userRouter.get('/me', Auth.isAuth , userController.getMe);
-userRouter.put('/me', Auth.isAuth , userController.update);
+userRouter.put('/update', Auth.isAuth , userController.update);
 userRouter.delete('/me', Auth.isAuth , userController.delete);
-userRouter.get('/me', Auth.isAuth , userController.logout);
+userRouter.post('/logout', Auth.isAuth , userController.logout);
 
 //admin routes
 userRouter.get('/', Auth.isAuth, Auth.isAdmin, userController.getUsers);

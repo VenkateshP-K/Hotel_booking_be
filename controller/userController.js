@@ -29,6 +29,7 @@ const userController = {
             //create a new user
             const newUser = new User({
                 ...req.body,
+                passwordHash
             });
 
             //save the user to the database
