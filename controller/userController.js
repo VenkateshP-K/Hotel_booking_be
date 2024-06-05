@@ -218,7 +218,7 @@ getUserById : async (req, res) => {
 updateUserById : async (req, res) => {
     try {
         //get userId from the request
-        const userId = req.params.id;
+        const {userId} = req.params;
 
         //get user data from the request body
         const { username, email, location } = req.body;

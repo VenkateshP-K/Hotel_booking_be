@@ -14,8 +14,9 @@ const roomRouter = express.Router();
 roomRouter.post('/', auth.isAuth , auth.isAdmin, roomController.createRoom);
 roomRouter.get('/', auth.isAuth , roomController.getRooms);
 roomRouter.get('/:roomId', auth.isAuth , roomController.getRoom);
-roomRouter.put('/:id', auth.isAuth , auth.isAdmin, roomController.updateRoom);
-roomRouter.delete('/:id', auth.isAuth , auth.isAdmin, roomController.deleteRoom);
+roomRouter.get('/bookedRooms/:userId', auth.isAuth , roomController.getBookedRooms);
+roomRouter.put('/:roomId', auth.isAuth , auth.isAdmin, roomController.updateRoom);
+roomRouter.delete('/:roomId', auth.isAuth , auth.isAdmin, roomController.deleteRoom);
 
 roomRouter.post('/book/:roomId/', auth.isAuth , roomController.bookRoom);
 roomRouter.post('/unbook/:roomId/', auth.isAuth , roomController.unbookRoom);

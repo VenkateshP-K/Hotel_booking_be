@@ -13,8 +13,8 @@ const hotelRouter = express.Router();
 hotelRouter.post('/',auth.isAuth,auth.isAdmin,hotelController.createHotel);
 hotelRouter.get('/', auth.isAuth,hotelController.getAllHotels);
 hotelRouter.get('/:id', auth.isAuth,auth.isAdmin,hotelController.getHotel);
-hotelRouter.put('/:id', auth.isAuth,auth.isAdmin,hotelController.updateHotel);
-hotelRouter.delete('/:id', auth.isAuth,auth.isAdmin,hotelController.deleteHotel);
+hotelRouter.put('/:hotelId', auth.isAuth,auth.isAdmin,hotelController.updateHotel);
+hotelRouter.delete('/:hotelId', auth.isAuth,auth.isAdmin,hotelController.deleteHotel);
 
 //export hotel routes
 module.exports = hotelRouter;

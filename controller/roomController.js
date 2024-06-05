@@ -1,189 +1,210 @@
-//import rooom model
+// Import room model
 const Room = require('../models/rooms');
 
-//import user model
+// Import user model
 const User = require('../models/users');
 
-//import hotel model
+// Import hotel model
 const Hotel = require('../models/hotels');
 
-//create roomController object
+// Create roomController object
 const roomController = {
 
-    //create new room
+    // Create new room
     createRoom: async (req, res) => {
         try {
-            //get the userId from the request object
+            // Get the userId from the request object
             const userId = req.userId;
 
-            //get the hotelId from the request object
-            const hotelId = req.body.hotelId;
+            // Get the hotelId from the request object
+            const { hotelId, name, description, capacity, status, amentities, date } = req.body;
 
-            //create a new room
+
+            // Create a new room
             const newRoom = new Room({
-                ...req.body,
-                Hotel : hotelId,
-                createdBy : userId
-            })
+                name,
+                description,
+                capacity,
+                status,
+                amentities,
+                price,
+                date,
+                Hotel: hotelId,
+                createdBy: userId
+            });
 
-            //save the new room
+            // Save the new room
             const room = await newRoom.save();
 
-            //push the room to the hotel
+            // Push the room to the hotel
             await Hotel.findByIdAndUpdate(hotelId, {
-                $push : {
-                    rooms : room._id
-                }
-            })
+                $push: { rooms: room._id }
+            });
 
-            //send the response
+            // Send the response
             res.status(200).json(room);
 
         } catch (error) {
-            res.status(500).json({message:error.message});            
+            res.status(500).json({ message: error.message });
         }
-},
-//get all rooms
-getRooms : async (req, res) => {
-    try {
-        //get all rooms
-        const rooms = await Room.find();
+    },
 
-        //send the response
-        res.status(200).json(rooms);
-    } catch (error) {
-        res.status(500).json({message:error.message});
-    }
-},
-//get a room
-getRoom : async (req, res) => {
-    try {
-        //get room id from the request object
-        const roomId = req.params.roomId;
+    // Get all rooms
+    getRooms: async (req, res) => {
+        try {
+            // Get all rooms
+            const rooms = await Room.find();
 
-        //get the room
-        const room = await Room.findById(roomId);
-
-        //send the response
-        res.status(200).json(room);
-
-    } catch (error) {
-        res.status(500).json({message:error.message});
-    }
-},
-//update a room
-updateRoom : async(req, res) => {
-    try {
-        //get the room id from the request object
-        const roomId = req.params.roomId;
-
-        //update the job
-        const room = await Room.findByIdAndUpdate(roomId, req.body, {
-            new : true
-        });
-
-        //send the response
-        res.status(200).json(room);
-
-    } catch (error) {
-        res.status(500).json({message:error.message});
-    }
-},
-//delete a room
-deleteRoom : async (req, res) => {
-    try {
-        //get the roomid from the request object
-        const roomId = req.params.roomId;
-
-        //delete the room
-        await Room.findByIdAndDelete(roomId);
-
-        //send the response
-        res.status(200).json({message:'Room deleted successfully'});
-
-    } catch (error) {
-        res.ststus(500).json({message:error.message});
-    }
-},
-//to book a room
-bookRoom : async (req, res) => {
-    try {
-        //get the room id from the request object
-        const roomId = req.params.roomId;
-
-        //get the userId from the request object
-        const userId = req.userId;
-
-        //get the room
-        const room = await Room.findById(roomId);
-
-        //check if the room status is available or not
-        if(room.status !== 'available'){
-            return res.status(400).json({message:'Room is already booked'});
+            // Send the response
+            res.status(200).json(rooms);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
+    },
 
-        //update the room
-        const updatedRoom = await Room.findByIdAndUpdate(roomId, {
-            staus : 'booked'
-        }, {
-            new : true
-        });
+    // Get a room
+    getRoom: async (req, res) => {
+        try {
+            // Get room id from the request object
+            const roomId = req.params.roomId;
 
-        //push the userid to the room's customers array
-        await Room.findByIdAndUpdate(roomId, {
-            $push : {
-                customers : userId
-            },
-            status : true
-        })
+            // Get the room
+            const room = await Room.findById(roomId);
 
-        //send the booked room as response
-        res.status(200).json(room);
+            // Send the response
+            res.status(200).json(room);
 
-    } catch (error) {
-        res.status(500).json({message:error.message});
-    }
-},
-//to unbook a room
-unbookRoom : async (req, res) => {
-    try {
-        //get the room id from the request object
-        const roomId = req.params.roomId;
-
-        //get the userId from the request object
-        const userId = req.userId;
-
-        //get the room
-        const room = await Room.findById(roomId);
-
-        //check if the room status is available or not  
-        if(room.status !== 'booked'){
-            return res.status(400).json({message:'Room is not booked'});
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
+    },
 
-        //update the room
-        const updatedRoom = await Room.findByIdAndUpdate(roomId, {
-            staus : 'available'
-        }, {
-            new : true
-        });
+    // Update a room
+    updateRoom : async (req, res) => {
+        try {
+            const  {roomId}  = req.params;
+            const updatedRoom = await Room.findByIdAndUpdate(roomId, req.body, { new: true });
+    
+            if (!updatedRoom) {
+                return res.status(404).json({ message: 'Room not found' });
+            }
+    
+            res.status(200).json({ message: 'Room updated successfully', updatedRoom });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
 
-        //remove the userid from the room's customers array
-        await Room.findByIdAndUpdate(roomId, {
-            $pull : {
-                customers : userId
-            },
-            status : false
-        });
+    // Delete a room
+    deleteRoom: async (req, res) => {
+        try {
+            // Get the room id from the request object
+            const roomId = req.params.roomId;
 
-        //send the unbooked room as response
-        res.status(200).json(room);
+            // Delete the room
+            await Room.findByIdAndDelete(roomId);
 
-    } catch (error) {
-        res.status(500).json({message:error.message});
+            // Send the response
+            res.status(200).json({ message: 'Room deleted successfully' });
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    // Book a room
+    bookRoom: async (req, res) => {
+        try {
+            // Get the room id from the request object
+            const roomId = req.params.roomId;
+
+            // Get the userId from the request object
+            const userId = req.userId;
+
+            // Get the room
+            const room = await Room.findById(roomId);
+
+            // Check if the room status is available or not
+            if (room.status !== 'available') {
+                return res.status(400).json({ message: 'Room is already booked' });
+            }
+
+            // Update the room
+            const updatedRoom = await Room.findByIdAndUpdate(roomId, {
+                isBooked: true,
+                status: 'booked'
+            }, { new: true });
+
+            // Push the userId to the room's customers array
+            await Room.findByIdAndUpdate(roomId, {
+                $push: { customers: userId }
+            });
+
+            // Push the booked rooms to the user
+            await User.findByIdAndUpdate(userId, {
+                $push: { rooms: roomId }
+            });
+
+            // Send the booked room as response
+            res.status(200).json(updatedRoom);
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    // Get booked rooms
+    getBookedRooms: async (req, res) => {
+        try {
+            // Get the userId from the request object
+            const userId = req.params.userId;
+
+            // Get the rooms
+            const rooms = await Room.find({ customers: userId });
+
+            // Send the response
+            res.status(200).json(rooms);
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    // Unbook a room
+    unbookRoom: async (req, res) => {
+        try {
+            // Get the room id from the request object
+            const roomId = req.params.roomId;
+
+            // Get the userId from the request object
+            const userId = req.userId;
+
+            // Get the room
+            const room = await Room.findById(roomId);
+
+            // Check if the room status is booked or not
+            if (room.status !== 'booked') {
+                return res.status(400).json({ message: 'Room is not booked' });
+            }
+
+            // Update the room
+            const updatedRoom = await Room.findByIdAndUpdate(roomId, {
+                status: 'available'
+            }, { new: true });
+
+            // Remove the userId from the room's customers array
+            await Room.findByIdAndUpdate(roomId, {
+                $pull: { customers: userId }
+            });
+
+            // Send the unbooked room as response
+            res.status(200).json(updatedRoom);
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
-}
-}
+};
 
-//export roomController object
+// Export roomController object
 module.exports = roomController;

@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 const hotelSchema = new mongoose.Schema({
     name : String,
     address : String,
-    price : Number,
-    rooms:{
+    description : String,
+    rooms:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Room'
-    }
+    }]
 })
 
 //create model

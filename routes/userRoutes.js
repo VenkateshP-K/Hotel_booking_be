@@ -15,15 +15,14 @@ userRouter.post('/', userController.register);
 userRouter.post('/login', userController.login);
 
 userRouter.get('/me', Auth.isAuth , userController.getMe);
-userRouter.put('/update', Auth.isAuth , userController.update);
 userRouter.delete('/me', Auth.isAuth , userController.delete);
 userRouter.post('/logout', Auth.isAuth , userController.logout);
 
 //admin routes
 userRouter.get('/', Auth.isAuth, Auth.isAdmin, userController.getUsers);
 userRouter.get('/:id', Auth.isAuth, Auth.isAdmin, userController.getUserById);
-userRouter.put('/:id', Auth.isAuth, Auth.isAdmin, userController.updateUserById);
-userRouter.delete('/:id', Auth.isAuth, Auth.isAdmin, userController.deleteUserById);
+userRouter.put('/update/:userId', Auth.isAuth, userController.updateUserById);
+userRouter.delete('/:userId', Auth.isAuth, Auth.isAdmin, userController.deleteUserById);
 
 //export userRouter
 module.exports = userRouter;

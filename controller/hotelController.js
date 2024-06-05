@@ -10,14 +10,16 @@ const hotelController = {
     createHotel : async (req, res) => {
         try {
             //get the data from the request body
-            const {name, address,price} = req.body;
+            const {name, address,description} = req.body;
 
             //get the userid from the request
             const {userId}= req.userId;
 
             //create new hotel
             const newHotel = new Hotel({
-                ...req.body,
+                name,
+                address,                
+                description,
                 createdBy:userId,
             })
 
@@ -62,21 +64,18 @@ const hotelController = {
    //update a hotel
    updateHotel : async (req, res) => {
     try {
-        
-        //get the hotel id from the request params
-        const {hotelId} = req.params;
+        const  {hotelId}  = req.params;
+        const updatedHotel = await Hotel.findByIdAndUpdate(hotelId, req.body, { new: true });
 
-        //update hotel
-        const updatedHotel = await Hotel.findByIdAndUpdate(hotelId, req.body, {new : true});
-          
-        //return the response
-        res.status(200).json({message : 'Hotel updated successfully', updatedHotel})
+        if (!updatedHotel) {
+            return res.status(404).json({ message: 'Hotel not found' });
+        }
 
+        res.status(200).json({ message: 'Hotel updated successfully', updatedHotel });
     } catch (error) {
-        res.status(500).json({message : error.message})
+        res.status(500).json({ message: error.message });
     }
-   },
-
+},
    //delete a hotel
    deleteHotel : async (req, res) => {
     try {

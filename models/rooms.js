@@ -6,10 +6,11 @@ const roomSchema = new mongoose.Schema({
     name : Number,
     description : String,
     capacity : Number,
+    price : Number,
     status:{
         type: String,
         default: 'available',
-        enum : ['available', 'unavailable']
+        enum: ['available', 'booked']
     },
     amentities:{
         type: Array,
@@ -21,4 +22,6 @@ const roomSchema = new mongoose.Schema({
 })
 
 //export the model
-module.exports = mongoose.model('Room', roomSchema)
+const Room = mongoose.model('Room', roomSchema)
+
+module.exports = Room
