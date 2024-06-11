@@ -19,12 +19,10 @@ const roomRouter = require("./routes/roomRoutes");
 const app = express();
 
 //use cors
-app.use(cors(
-    {
-        origin: 'https://hotel-booking-be-hxbx.onrender.com',
-        credentials: true
-    }
-));
+app.use(cors({
+    origin:['http://localhost:5173', 'https://hotel-booking-be-hxbx.onrender.com'],
+    credentials:true
+}));
 
 //USE COOKIE PARSER
 app.use(cookieParser());
@@ -35,15 +33,15 @@ app.use(morgan('dev'));
 //use express middleware
 app.use(express.json());
 
-//render views
-app.get('/', (req, res) => {
-    res.send('Hello!');
-})
-
 //define endpoints
 app.use('/api/users', userRouter);
 app.use('/api/hotels',hotelRouter);
 app.use('/api/rooms',roomRouter);
+
+//render views
+app.get('/', (req, res) => {
+    res.send('Hello!');
+})
 
 //export app 
 module.exports = app;
