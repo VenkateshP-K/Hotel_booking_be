@@ -21,7 +21,7 @@ const app = express();
 //use cors
 app.use(cors(
     {
-        origin: 'http://localhost:5173',
+        origin: 'https://hotel-booking-be-hxbx.onrender.com',
         credentials: true
     }
 ));
