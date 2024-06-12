@@ -10,6 +10,9 @@ const auth = require('../auth');
 const hotelRouter = express.Router();
 
 //define routes
+hotelRouter.get('/', (req, res) => {
+    res.send('User route');
+});
 hotelRouter.post('/',auth.isAuth,auth.isAdmin,hotelController.createHotel);
 hotelRouter.get('/', auth.isAuth,hotelController.getAllHotels);
 hotelRouter.get('/:id', auth.isAuth,auth.isAdmin,hotelController.getHotel);
