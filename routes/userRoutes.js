@@ -24,5 +24,9 @@ userRouter.get('/:id', Auth.isAuth, Auth.isAdmin, userController.getUserById);
 userRouter.put('/update/:userId', Auth.isAuth, userController.updateUserById);
 userRouter.delete('/:userId', Auth.isAuth, Auth.isAdmin, userController.deleteUserById);
 
+userRouter.get('/',(req, res) => {
+    res.send('User routes');
+})
+
 //export userRouter
 module.exports = userRouter;
