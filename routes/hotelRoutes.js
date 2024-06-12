@@ -10,14 +10,15 @@ const auth = require('../auth');
 const hotelRouter = express.Router();
 
 //define routes
-hotelRouter.get('/', (req, res) => {
-    res.send('User route');
-});
+
 hotelRouter.post('/',auth.isAuth,auth.isAdmin,hotelController.createHotel);
 hotelRouter.get('/', auth.isAuth,hotelController.getAllHotels);
 hotelRouter.get('/:id', auth.isAuth,auth.isAdmin,hotelController.getHotel);
 hotelRouter.put('/:hotelId', auth.isAuth,auth.isAdmin,hotelController.updateHotel);
 hotelRouter.delete('/:hotelId', auth.isAuth,auth.isAdmin,hotelController.deleteHotel);
 
+hotelRouter.get('/',(req, res) => {
+    res.send('Hotel route');
+})
 //export hotel routes
 module.exports = hotelRouter;
