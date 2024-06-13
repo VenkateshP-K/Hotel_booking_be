@@ -20,7 +20,7 @@ userRouter.post('/logout', Auth.isAuth , userController.logout);
 
 //admin routes
 userRouter.get('/', Auth.isAuth, Auth.isAdmin, userController.getUsers);
-userRouter.get('/:id', Auth.isAuth, Auth.isAdmin, userController.getUserById);
+userRouter.get('/:userId', Auth.isAuth, Auth.isAdmin, userController.getUserById);
 userRouter.put('/update/:userId', Auth.isAuth, userController.updateUserById);
 userRouter.delete('/:userId', Auth.isAuth, Auth.isAdmin, userController.deleteUserById);
 
