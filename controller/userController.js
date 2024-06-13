@@ -46,7 +46,7 @@ const userController = {
             res.cookie('token', token, {
                 httpOnly: true,
                 sameSite: 'none',
-                secure: true,
+                secure: process.env.NODE_ENV === 'production',
                 maxAge: 24 * 60 * 60 * 1000, // 24 hours
             });
 
@@ -58,7 +58,7 @@ const userController = {
     getMe: async (req, res) => {
         try {
             const userId = req.userId;
-            const user = await User.findById(userId).select('-passwordHash -__v -_id');
+            const user = await User.findById(userId).select('-passwordHash -__v -_id'); 
 
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
