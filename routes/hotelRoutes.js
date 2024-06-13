@@ -17,7 +17,7 @@ hotelRouter.get('/:id', auth.isAuth,auth.isAdmin,hotelController.getHotel);
 hotelRouter.put('/:hotelId', auth.isAuth,auth.isAdmin,hotelController.updateHotel);
 hotelRouter.delete('/:hotelId', auth.isAuth,auth.isAdmin,hotelController.deleteHotel);
 
-hotelRouter.get('/',(req, res) => {
+hotelRouter.get('/hotels',(req, res) => {
     res.send('Hotel routes');
 })
 //export hotel routes
