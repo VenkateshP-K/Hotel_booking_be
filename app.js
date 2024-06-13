@@ -22,7 +22,7 @@ app.use('/api/users', userRouter);
 app.use('/api/hotels', hotelRouter);
 app.use('/api/rooms', roomRouter);
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send('Hello!');
 });
 
