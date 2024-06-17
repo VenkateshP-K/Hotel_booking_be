@@ -23,4 +23,3 @@ app.listen(config.PORT, () => {
 .catch((err) => {
     console.log(err.message);
 })
-
