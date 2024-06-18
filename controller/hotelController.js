@@ -1,5 +1,4 @@
 const Hotel = require('../models/hotels');
-const User = require('../models/users');
 
 const hotelController = {
     createHotel : async (req, res) => {
@@ -28,7 +27,7 @@ const hotelController = {
             res.status(500).json({message: error.message});
         }
     },
-    getHotel : async(req, res) => {
+    getHotel : async (req, res) => {
         try {
             const {hotelId} = req.params;
             const hotel = await Hotel.findById(hotelId).populate('rooms');

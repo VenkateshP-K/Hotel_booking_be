@@ -21,9 +21,5 @@ roomRouter.delete('/:roomId', auth.isAuth , auth.isAdmin, roomController.deleteR
 roomRouter.post('/book/:roomId/', auth.isAuth , roomController.bookRoom);
 roomRouter.post('/unbook/:roomId/', auth.isAuth , roomController.unbookRoom);
 
-roomRouter.get('/',(req, res) => {
-    res.send('Room routes');
-})
-
 //export router
 module.exports = roomRouter;
