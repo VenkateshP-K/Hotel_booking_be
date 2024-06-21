@@ -13,7 +13,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["user", "admin"],    
         default: "user"
-    }
+    },
+    bookedRooms: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Room'
+    }],
 })
 
 const User = mongoose.model('User', userSchema,);

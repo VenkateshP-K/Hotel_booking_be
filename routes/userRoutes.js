@@ -15,6 +15,7 @@ userRouter.post('/', userController.register);
 userRouter.post('/login', userController.login);
 
 userRouter.get('/me', Auth.isAuth , userController.getMe);
+userRouter.get('/', Auth.isAuth ,Auth.isAdmin, userController.getAllUsers);
 userRouter.post('/logout', Auth.isAuth , userController.logout);
 
 //admin routes

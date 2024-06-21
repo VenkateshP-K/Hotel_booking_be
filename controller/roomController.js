@@ -6,14 +6,14 @@ const roomController = {
     createRoom: async (req, res) => {
         try {
             const userId = req.userId;
-            const { hotelId, name, description, capacity, status, amentities, date, price } = req.body;
+            const { hotelId, name, description, capacity, status, amenities, date, price } = req.body;
 
             const newRoom = new Room({
                 name,
                 description,
                 capacity,
                 status,
-                amentities,
+                amenities,
                 price,
                 date,
                 hotel: hotelId,
@@ -32,8 +32,13 @@ const roomController = {
     },
     getRooms: async (req, res) => {
         try {
-            const rooms = await Room.find().populate('hotel customers');
-            res.status(200).json(rooms);
+            const rooms = await Room.find();
+            const roomsWithHotels = await Promise.all(rooms.map(async room => {
+                const hotel = await Hotel.findById(room.hotel);
+                return { ...room._doc, hotel };
+            }));
+
+            res.status(200).json(roomsWithHotels);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -41,18 +46,21 @@ const roomController = {
     getRoom: async (req, res) => {
         try {
             const roomId = req.params.roomId;
-            const room = await Room.findById(roomId).populate('hotel customers');
+            const room = await Room.findById(roomId);
 
             if (!room) {
                 return res.status(404).json({ message: 'Room not found' });
             }
 
-            res.status(200).json(room);
+            const hotel = await Hotel.findById(room.hotel);
+            const customers = await User.find({ bookedRooms: roomId });
+
+            res.status(200).json({ ...room._doc, hotel, customers });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
     },
-    updateRoom : async (req, res) => {
+    updateRoom: async (req, res) => {
         try {
             const { roomId } = req.params;
             const updatedRoom = await Room.findByIdAndUpdate(roomId, req.body, { new: true });
@@ -100,7 +108,7 @@ const roomController = {
             });
 
             await User.findByIdAndUpdate(userId, {
-                $push: { rooms: roomId }
+                $push: { bookedRooms: roomId }
             });
 
             res.status(200).json(updatedRoom);
@@ -111,9 +119,13 @@ const roomController = {
     getBookedRooms: async (req, res) => {
         try {
             const userId = req.params.userId;
-            const rooms = await Room.find({ customers: userId }).populate('hotel');
+            const rooms = await Room.find({ customers: userId });
+            const roomsWithHotels = await Promise.all(rooms.map(async room => {
+                const hotel = await Hotel.findById(room.hotel);
+                return { ...room._doc, hotel };
+            }));
 
-            res.status(200).json(rooms);
+            res.status(200).json(roomsWithHotels);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -134,6 +146,10 @@ const roomController = {
 
             await Room.findByIdAndUpdate(roomId, {
                 $pull: { customers: userId }
+            });
+
+            await User.findByIdAndUpdate(userId, {
+                $pull: { bookedRooms: roomId }
             });
 
             res.status(200).json(updatedRoom);
