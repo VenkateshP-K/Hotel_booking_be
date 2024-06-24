@@ -10,7 +10,7 @@ const roomRouter = require("./routes/roomRoutes");
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://unique-cheesecake-de7813.netlify.app'],
     credentials: true
 }));
 
