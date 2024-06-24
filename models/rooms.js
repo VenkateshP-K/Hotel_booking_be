@@ -5,9 +5,8 @@ const roomSchema = new mongoose.Schema({
     description: { type: String, required: true },
     capacity: { type: Number, required: true },
     status: { type: String, required: true },
-    amenities: { type: [String], required: true },
+    amenities: { type: [Array], required: true },
     price: { type: Number, required: true },
-    date: { type: Date, required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     customers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     isBooked: { type: Boolean, default: false }

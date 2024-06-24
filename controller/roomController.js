@@ -92,6 +92,8 @@ const roomController = {
         try {
             const roomId = req.params.roomId;
             const userId = req.userId;
+            const { checkIn, checkOut } = req.body;
+
             const room = await Room.findById(roomId);
 
             if (room.status !== 'available') {
@@ -100,7 +102,9 @@ const roomController = {
 
             const updatedRoom = await Room.findByIdAndUpdate(roomId, {
                 isBooked: true,
-                status: 'booked'
+                status: 'booked',
+                checkIn,
+                checkOut
             }, { new: true });
 
             await Room.findByIdAndUpdate(roomId, {
@@ -116,6 +120,7 @@ const roomController = {
             res.status(500).json({ message: error.message });
         }
     },
+
     getBookedRooms: async (req, res) => {
         try {
             const userId = req.params.userId;

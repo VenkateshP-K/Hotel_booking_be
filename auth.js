@@ -6,18 +6,14 @@ const Auth = {
     isAuth: (req, res, next) => {
         const token = req.cookies.token;
         if (!token) {
-            return res.status(401).json({
-                message: "Unauthorized"
-            });
+            return res.status(401).json({ message: "Unauthorized" });
         }
         try {
             const decodedToken = jwt.verify(token, config.JWT_SECRET);
-            req.userId = decodedToken.id;
+            req.userId = decodedToken.userId;  // Ensure this matches the payload structure
             next();
         } catch (error) {
-            return res.status(401).json({
-                message: error.message
-            });
+            return res.status(401).json({ message: error.message });
         }
     },
     isAdmin: async (req, res, next) => {
@@ -25,14 +21,10 @@ const Auth = {
             const userId = req.userId;
             const user = await User.findById(userId);
             if (!user) {
-                return res.status(404).json({
-                    message: "User not found"
-                });
+                return res.status(404).json({ message: "User not found" });
             }
             if (user.role !== 'admin') {
-                return res.status(403).json({
-                    message: "Forbidden"
-                });
+                return res.status(403).json({ message: "Forbidden" });
             }
             next();
         } catch (error) {

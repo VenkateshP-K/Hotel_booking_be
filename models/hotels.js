@@ -9,7 +9,8 @@ const hotelSchema = new mongoose.Schema({
     rooms:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Room'
-    }]
+    }],
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
 
 //create model
