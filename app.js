@@ -10,7 +10,7 @@ const roomRouter = require("./routes/roomRoutes");
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5173','https://polite-entremet-2d720f.netlify.app/'],
+    origin: ['http://localhost:5173'],
     credentials: true
 }));
 
