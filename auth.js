@@ -3,6 +3,7 @@ const config = require("./config");
 const User = require('./models/users');
 
 const Auth = {
+
     isAuth: (req, res, next) => {
         const token = req.cookies.token;
         if (!token) {
@@ -16,6 +17,7 @@ const Auth = {
             return res.status(401).json({ message: error.message });
         }
     },
+    
     isAdmin: async (req, res, next) => {
         try {
             const userId = req.userId;
