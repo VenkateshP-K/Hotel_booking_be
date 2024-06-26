@@ -2,16 +2,17 @@ const jwt = require("jsonwebtoken");
 const config = require("./config");
 const User = require('./models/users');
 
+
 const Auth = {
 
-    isAuth: (req, res, next) => {
-        const token = req.cookies.token;
+    isAuth: async (req, res, next) => {
+        const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
         if (!token) {
             return res.status(401).json({ message: "Unauthorized" });
         }
         try {
             const decodedToken = jwt.verify(token, config.JWT_SECRET);
-            req.userId = decodedToken.userId;  // Ensure this matches the payload structure
+            req.userId = decodedToken.userId;
             next();
         } catch (error) {
             return res.status(401).json({ message: error.message });

@@ -29,6 +29,7 @@ const userController = {
             res.status(500).json({ message: error.message });
         }
     },
+    
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
@@ -48,15 +49,16 @@ const userController = {
     
             res.cookie('token', token, { 
                 httpOnly: true, 
-                secure: process.env.NODE_ENV === 'production', 
-                sameSite: 'None' 
+                secure: true, 
+                sameSite: 'None',
+                maxAge: 24 * 60 * 60 * 1000 // 24 hours
             });
-            res.status(200).json({ message: 'Logged in successfully', token });
+            res.status(200).json({ message: 'Logged in successfully', token, user: { id: user._id, username: user.username, email: user.email, role: user.role } });
         } catch (error) {
             console.error('Error in login:', error);
             res.status(500).json({ message: error.message });
         }
-    },   
+    },
     getMe: async (req, res) => {
         try {
           const user = await User.findById(req.userId);
