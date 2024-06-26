@@ -15,7 +15,7 @@ const app = express();
 // }));
 
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://spiffy-lily-853399.netlify.app'],
+    origin: ['http://localhost:5173', 'https://guileless-cat-06c779.netlify.app'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
