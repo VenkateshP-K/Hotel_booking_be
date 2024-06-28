@@ -30,15 +30,10 @@ const roomController = {
             res.status(500).json({ message: error.message });
         }
     },
-    getRooms: async (req, res) => {
+    getRooms : async (req, res) => {
         try {
-            const rooms = await Room.find();
-            const roomsWithHotels = await Promise.all(rooms.map(async room => {
-                const hotel = await Hotel.findById(room.hotel);
-                return { ...room._doc, hotel };
-            }));
-
-            res.status(200).json(roomsWithHotels);
+            const rooms = await Room.find().populate('hotel').exec();
+            res.status(200).json(rooms);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

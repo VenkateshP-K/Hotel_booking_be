@@ -9,7 +9,8 @@ const roomSchema = new mongoose.Schema({
     price: { type: Number, required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     customers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    isBooked: { type: Boolean, default: false }
+    isBooked: { type: Boolean, default: false },
+    hotel: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel', required: true },
 });
 
 const Room = mongoose.model('Room', roomSchema);
