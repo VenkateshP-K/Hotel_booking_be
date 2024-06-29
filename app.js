@@ -10,7 +10,7 @@ const roomRouter = require("./routes/roomRoutes");
 const app = express();
 
 const corsOptions = {
-    origin: ['http://localhost:5173','https://whimsical-griffin-18317f.netlify.app'],
+    origin: ['http://localhost:5173','https://timely-starship-086d8d.netlify.app'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -29,6 +29,21 @@ app.use('/api/rooms', roomRouter);
 
 app.get('/api', (req, res) => {
     res.send('Hello!');
+});
+
+app.use((req, res, next) => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
+});
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    });
 });
 
 module.exports = app;
