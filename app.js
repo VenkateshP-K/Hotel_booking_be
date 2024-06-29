@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/userRoutes");
 const hotelRouter = require("./routes/hotelRoutes");
 const roomRouter = require("./routes/roomRoutes");
-const paymentRouter = require("./routes/paymentRoutes");
 
 const app = express();
 
@@ -27,7 +26,6 @@ app.use(express.json());
 app.use('/api/users', userRouter);
 app.use('/api/hotels', hotelRouter);
 app.use('/api/rooms', roomRouter);
-app.use('/api/payments', paymentRouter);
 
 app.get('/api', (req, res) => {
     res.send('Hello!');
