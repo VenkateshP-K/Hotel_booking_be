@@ -10,7 +10,7 @@ const roomRouter = require("./routes/roomRoutes");
 const app = express();
 
 const corsOptions = {
-    origin: ['http://localhost:5173','https://timely-starship-086d8d.netlify.app'],
+    origin: ['http://localhost:5173','https://hotelbooking-demo.netlify.app/'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
