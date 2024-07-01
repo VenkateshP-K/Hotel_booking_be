@@ -121,14 +121,11 @@ const roomController = {
 
     getBookedRooms: async (req, res) => {
         try {
-            const userId = req.params.userId;
-            const rooms = await Room.find({ customers: userId });
-            const roomsWithHotels = await Promise.all(rooms.map(async room => {
-                const hotel = await Hotel.findById(room.hotel);
-                return { ...room._doc, hotel };
-            }));
-
-            res.status(200).json(roomsWithHotels);
+            const bookedRooms = await Room.find({ status: "booked" }).populate("hotel").exec();
+            if (bookedRooms.length === 0) {
+                return res.status(404).json({ message: "No booked rooms found." });
+            }
+            res.status(200).json(bookedRooms);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
