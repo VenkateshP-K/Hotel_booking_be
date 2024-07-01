@@ -16,6 +16,8 @@ const roomController = {
                 amenities,
                 price,
                 date,
+                checkIn: date,
+                checkOut: date,
                 hotel: hotelId,
                 createdBy: userId
             });
