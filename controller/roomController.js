@@ -122,7 +122,7 @@ const roomController = {
     getBookedRooms: async (req, res) => {
         try {
             const userId = req.params.userId;
-            const rooms = await Room.find({ customers: userId }).populate('hotel');
+            const rooms = await Room.find({ customers: userId }).populate('hotelId', 'name');
             res.status(200).json({ bookings: rooms });
         } catch (error) {
             res.status(500).json({ message: error.message });
