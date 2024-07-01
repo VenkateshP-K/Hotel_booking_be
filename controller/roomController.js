@@ -7,7 +7,7 @@ const roomController = {
         try {
             const userId = req.userId;
             const { hotelId, name, description, capacity, status, amenities, date, price } = req.body;
-
+    
             const newRoom = new Room({
                 name,
                 description,
@@ -18,20 +18,21 @@ const roomController = {
                 date,
                 checkIn: date,
                 checkOut: date,
-                hotel: hotelId,
+                hotel: hotelId, // Ensure this matches the expected field in the Room schema
                 createdBy: userId
             });
-
+    
             const room = await newRoom.save();
             await Hotel.findByIdAndUpdate(hotelId, {
                 $push: { rooms: room._id }
             });
-
+    
             res.status(200).json(room);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
     },
+
     getRooms : async (req, res) => {
         try {
             const rooms = await Room.find().populate('hotel').exec();
